@@ -5,7 +5,7 @@ A discord bot for creating temp voices on your discord server
 ## Installation
 
 ```bash
-Create File ".env" and configure with the discord bot token, local guildId,... (See more in enviroment.d.ts)
+Use ".env.example" to fill in the ".env" file and configure your bot
 ---
 yarn install
 yarn run start:dev
