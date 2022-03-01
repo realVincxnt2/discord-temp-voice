@@ -22,7 +22,6 @@ export default new Event("interactionCreate", async (interaction) => {
   }
 
   if (interaction.isContextMenu()) {
-    await interaction.deferReply({ ephemeral: false });
     const command = client.commands.get(interaction.commandName);
     if (command) command.run(client, interaction as CommandInteraction);
   }
