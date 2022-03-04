@@ -47,7 +47,17 @@ export default new Command({
                     memberId: member.id,
                   },
                   { getInvites: true }
-                );
+                ).catch((err) => {
+                  console.log(err);
+                  interaction.reply({
+                    embeds: [
+                      embed
+                        .setDescription("Couldn't update the database")
+                        .setColor("RED"),
+                    ],
+                    ephemeral: true,
+                  });
+                });
 
                 interaction.reply({
                   embeds: [
@@ -64,7 +74,17 @@ export default new Command({
                     memberId: member.id,
                   },
                   { getInvites: false }
-                );
+                ).catch((err) => {
+                  console.log(err);
+                  interaction.reply({
+                    embeds: [
+                      embed
+                        .setDescription("Couldn't update the database")
+                        .setColor("RED"),
+                    ],
+                    ephemeral: true,
+                  });
+                });
 
                 interaction.reply({
                   embeds: [

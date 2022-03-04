@@ -140,9 +140,23 @@ export default new Command({
       case "invite":
         {
           const targetMember = <GuildMember>options.getMember("member");
-          voiceChannel.permissionOverwrites.edit(targetMember, {
-            CONNECT: true,
-          });
+          voiceChannel.permissionOverwrites
+            .edit(targetMember, {
+              CONNECT: true,
+            })
+            .catch((err) => {
+              console.log(err);
+              interaction.reply({
+                embeds: [
+                  embed
+                    .setDescription(
+                      "Error while editing the voice channel, maybe i don't have permission to do that"
+                    )
+                    .setColor("RED"),
+                ],
+                ephemeral: true,
+              });
+            });
 
           if (targetMember.id === member.id)
             return interaction.reply({
@@ -156,6 +170,16 @@ export default new Command({
 
           const databaseUser = await VoiceConfig.findOne({
             memberId: targetMember.id,
+          }).catch((err) => {
+            console.log(err);
+            interaction.reply({
+              embeds: [
+                embed
+                  .setDescription("Couldn't update the database")
+                  .setColor("RED"),
+              ],
+              ephemeral: true,
+            });
           });
 
           if (databaseUser && databaseUser.getInvites === false)
@@ -200,9 +224,23 @@ export default new Command({
       case "kick":
         {
           const targetMember = <GuildMember>options.getMember("member");
-          voiceChannel.permissionOverwrites.edit(targetMember, {
-            CONNECT: false,
-          });
+          voiceChannel.permissionOverwrites
+            .edit(targetMember, {
+              CONNECT: false,
+            })
+            .catch((err) => {
+              console.log(err);
+              interaction.reply({
+                embeds: [
+                  embed
+                    .setDescription(
+                      "Error while editing the voice channel, maybe i don't have permission to do that"
+                    )
+                    .setColor("RED"),
+                ],
+                ephemeral: true,
+              });
+            });
 
           if (targetMember.id === member.id)
             return interaction.reply({
@@ -226,7 +264,7 @@ export default new Command({
               ],
             });
 
-          targetMember.voice.setChannel(null);
+          targetMember.voice?.setChannel(null);
           interaction.reply({
             embeds: [
               embed
@@ -245,12 +283,28 @@ export default new Command({
           switch (turnChoice) {
             case "on":
               {
-                voiceChannel.permissionOverwrites.edit(guild.id, {
-                  CONNECT: null,
-                });
+                voiceChannel.permissionOverwrites
+                  .edit(guild.id, {
+                    CONNECT: null,
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    interaction.reply({
+                      embeds: [
+                        embed
+                          .setDescription(
+                            "Error while editing the voice channel, maybe i don't have permission to do that"
+                          )
+                          .setColor("RED"),
+                      ],
+                      ephemeral: true,
+                    });
+                  });
                 interaction.reply({
                   embeds: [
-                    embed.setDescription("Your Voice Channel is now public"),
+                    embed.setDescription(
+                      "Your Voice Channel is open for everyone"
+                    ),
                   ],
                   ephemeral: true,
                 });
@@ -261,9 +315,10 @@ export default new Command({
                 voiceChannel.permissionOverwrites.edit(guild.id, {
                   CONNECT: false,
                 });
+
                 interaction.reply({
                   embeds: [
-                    embed.setDescription("Your Voice Channel is now closed"),
+                    embed.setDescription("Your Voice Channel is closed"),
                   ],
                   ephemeral: true,
                 });
